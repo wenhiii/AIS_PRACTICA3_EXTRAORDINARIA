@@ -338,7 +338,7 @@ En la cual se procesa la expresion de manera dinamica.
 
 ### Ejemplo 7
 
-**INPUT y OUTPUT**: `"1 +2 +3 +4"` -> `10`
+**INPUT y OUTPUT**: `"1 + 2 + 3 + 4"` -> `10`
 
 **EJ7. Código de test**
 ```java
@@ -635,20 +635,18 @@ Caused by: java.lang.NumberFormatException: For input string: "HoLa"
 ```
 **EJ11. Código mínimo para que el test pase**
 
-La implementacion actual solo detectaba si es una letra, se ha de modificar para que coincidan con una o más letras (mayúsculas o minúsculas) y solo letras 
 ```java
     public int parse(String expression) {
-        if (expression.matches("^[a-zA-Z]+$")) {
-            throw new InvalidExpression("Invalid Expression");
-        }
-    
-        String[] parts = expression.split(" \\+ ");
-        int sum = 0;
-        for (String part : parts) {
-            sum += Integer.parseInt(part.trim());
-        }
-        return sum;
+    if (expression.matches("^[a-zA-Z]$") || expression.equals("HoLa")) {
+        throw new InvalidExpression("Invalid Expression");
     }
+    String[] parts = expression.split(" \\+ ");
+    int sum = 0;
+    for (String part : parts) {
+        sum += Integer.parseInt(part.trim());
+    }
+    return sum;
+}
 
 ```
 **EJ11. Captura de que TODOS los test PASAN**
@@ -702,31 +700,45 @@ Caused by: java.lang.NumberFormatException: For input string: "A"
 
 **EJ12. Código mínimo para que el test pase**
 
-La implementación original validaba únicamente si toda la expresión estaba compuesta por letras, detectando casos como "A" o "HoLa" como inválidos. Sin embargo, expresiones mixtas como "1 + B" no eran rechazadas, ya que contenían caracteres válidos y escapaban a esa verificación.
-
-La nueva implementación mejora esto procesando cada operando tras dividir la expresión por " + ". Al intentar convertir cada parte a número dentro de un bloque try-catch, se garantiza que todas las partes sean numéricas. Si alguna no lo es, se lanza una excepción controlada (InvalidExpression), asegurando un comportamiento robusto y coherente ante entradas inválidas.
-
-
 ```java
     public int parse(String expression) {
-        if (expression.matches("^[a-zA-Z]+$")) {
+        if (expression.matches("^[a-zA-Z]$") || expression.equals("HoLa") || (expression.equals("1 + A"))) {
             throw new InvalidExpression("Invalid Expression");
         }
         String[] parts = expression.split(" \\+ ");
         int sum = 0;
-        try {
-            for (String part : parts) {
-                sum += Integer.parseInt(part.trim());
-            }
-        } catch (NumberFormatException e) {
-            throw new InvalidExpression("Invalid Expression");
+        for (String part : parts) {
+            sum += Integer.parseInt(part.trim());
         }
         return sum;
     }
-
 ```
 
 **EJ12. Captura de que TODOS los test PASAN**
+
+**EJ12. Refactorización debido a patrón encontrado**
+
+En el código original, se detectaba una expresión inválida solo si era una letra única o cadenas específicas como "HoLa" o "1 + A". Esto limita la validación a casos puntuales y no detecta expresiones con letras mezcladas o inválidas.
+
+La refactorización mejora esto validando cada término separado por "+" con la expresión regular -?\d+, que asegura que solo números enteros (positivos o negativos) sean aceptados. Así, cualquier término que no cumpla se rechaza inmediatamente con una excepción clara.
+```java
+public int parse(String expression) {
+    String[] parts = expression.split(" \\+ ");
+    int sum = 0;
+    for (String part : parts) {
+        part = part.trim();
+
+        if (!part.matches("-?\\d+")) {
+            throw new InvalidExpression("Invalid Expression");
+        }
+        sum += Integer.parseInt(part);
+    }
+    return sum;
+}
+```
+
+**EJ12. Captura de que TODOS los test PASAN refactorizacion**
+
 
 ![Pasa](capturas/12.png "Pasa")
 
@@ -765,32 +777,22 @@ Process finished with exit code -1
 
 **EJ13. Código mínimo para que el test pase**
 
-Hemos adaptado la misma estructura que en la suma, es decir, mediante el uso de un bucle for. Sin embargo, en este caso utilizamos un bucle for-each en lugar de un bucle for-i, ya que en la resta sí nos importa el orden.
-
-Para ello, también debemos decidir cuál es el primer operando y cuál es el segundo.
-
-Debemos llegar a esta conclusión: un primer operando seguido de un conjunto de pares (signo, número).
-De modo que, en el ejemplo `"5 - 3"`, se exprese de la siguiente forma: `5` como primer operando y `(-3)` como segundo operando.
-
 ```java
     public int parse(String expression) {
-        if (!expression.matches("[0-9\\s\\+\\-]+")) {
-            throw new InvalidExpression("Invalid Expression");
-        }
+        if (expression.equals("5 - 3"))
+            return 2;
+        String[] parts = expression.split(" \\+ ");
+        int sum = 0;
+        for (String part : parts) {
+            part = part.trim();
     
-        String[] parts = expression.split("\\s*[\\+\\-]\\s*");
-        int result = Integer.parseInt(parts[0].trim());
-    
-        for (int i = 1; i < parts.length; i++) {
-            if (expression.contains("-")){
-                result -= Integer.parseInt(parts[i].trim());
-            }else{
-                result += Integer.parseInt(parts[i].trim());
+            if (!part.matches("-?\\d+")) {
+                throw new InvalidExpression("Invalid Expression");
             }
+            sum += Integer.parseInt(part);
         }
-    
-        return result;
-    }    
+        return sum;
+    }
 ```
 **EJ13. Captura de que TODOS los test PASAN**
 
@@ -798,7 +800,7 @@ De modo que, en el ejemplo `"5 - 3"`, se exprese de la siguiente forma: `5` como
 
 ### Ejemplo 14
 
-**INPUT y OUTPUT**: `"1 - 2"` -> `2`
+**INPUT y OUTPUT**: `"1 - 2"` -> `-1`
 
 **EJ14. Código de test**
 ```java
@@ -817,7 +819,34 @@ De modo que, en el ejemplo `"5 - 3"`, se exprese de la siguiente forma: `5` como
 
 **EJ14. Mensaje del test añadido que NO PASA**
 ```log
- *  The test case did not report any output.
+es.codeurjc.test.InvalidExpression: Invalid Expression
+
+	at es.codeurjc.test.CalculatorParser.parse(CalculatorParser.java:18)
+	at es.codeurjc.test.CalculatorParserTest.Test_Num_14(CalculatorParserTest.java:174)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+```
+
+**EJ14. Código mínimo para que el test pase**
+```java
+    public int parse(String expression) {
+        if (expression.equals("5 - 3"))
+            return 2;
+        if (expression.equals("1 - 2"))
+            return -1;
+        String[] parts = expression.split(" \\+ ");
+        int sum = 0;
+        for (String part : parts) {
+            part = part.trim();
+
+            if (!part.matches("-?\\d+")) {
+                throw new InvalidExpression("Invalid Expression");
+            }
+            sum += Integer.parseInt(part);
+        }
+        return sum;
+    }
 ```
 **EJ14. Captura de que TODOS los test PASAN**
 
@@ -844,11 +873,75 @@ De modo que, en el ejemplo `"5 - 3"`, se exprese de la siguiente forma: `5` como
 
 **EJ15. Mensaje del test añadido que NO PASA**
 ```log
- *  The test case did not report any output.
+
+es.codeurjc.test.InvalidExpression: Invalid Expression
+
+	at es.codeurjc.test.CalculatorParser.parse(CalculatorParser.java:15)
+	at es.codeurjc.test.CalculatorParserTest.Test_Num_15(CalculatorParserTest.java:186)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+
 ```
+
+**EJ15. Código mínimo para que el test pase**
+```java
+public int parse(String expression) {
+        if (expression.equals("5 - 3"))
+            return 2;
+        if (expression.equals("1 - 2"))
+            return -1;
+        if (expression.equals("7 - 2 - 1"))
+            return 4;
+        String[] parts = expression.split(" \\+ ");
+        int sum = 0;
+        for (String part : parts) {
+            part = part.trim();
+
+            if (!part.matches("-?\\d+")) {
+                throw new InvalidExpression("Invalid Expression");
+            }
+            sum += Integer.parseInt(part);
+        }
+        return sum;
+    }
+```
+
 **EJ15. Captura de que TODOS los test PASAN**
 
 ![Pasa](capturas/15.png "Pasa")
+
+**EJ15. Refactorización debido a patrón encontrado**
+
+La refactorización agrupa los tres if específicos en un único bloque genérico que detecta y resuelve cualquier cadena de restas secuenciales, eliminando la duplicación de lógica (DRY), mejorando la mantenibilidad al centralizar el parseo de restas en un solo lugar y haciendo al método escalable frente a expresiones más complejas sin necesidad de añadir nuevos casos especiales.
+```java
+public int parse(String expression) {
+    if (expression.contains(" - ") && !expression.contains(" + ")) {
+        String[] parts = expression.split("\\s-\\s");
+        int result = Integer.parseInt(parts[0].trim());
+        for (int i = 1; i < parts.length; i++) {
+            result -= Integer.parseInt(parts[i].trim());
+        }
+        return result;
+    }
+    
+    String[] parts = expression.split(" \\+ ");
+    int sum = 0;
+    for (String part : parts) {
+        part = part.trim();
+        if (!part.matches("-?\\d+")) {
+            throw new InvalidExpression("Invalid Expression");
+        }
+        sum += Integer.parseInt(part);
+    }
+    return sum;
+}
+
+```
+
+**EJ15. Captura de que TODOS los test PASAN refactorizacion**
+
 
 ### Ejemplo 16
 
@@ -898,99 +991,49 @@ De modo que, en el ejemplo `"5 - 3"`, se exprese de la siguiente forma: `5` como
 
 **EJ17. Mensaje del test añadido que NO PASA**
 ```log
-org.opentest4j.AssertionFailedError: 
-Expected :3
-Actual   :1
-<Click to see difference>
 
+es.codeurjc.test.InvalidExpression: Invalid Expression
 
-	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
-	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
-	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
-	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
-	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
-	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:531)
-	at es.codeurjc.test.CalculatorParserTest.Test_Num_17(CalculatorParserTest.java:212)
+	at es.codeurjc.test.CalculatorParser.parse(CalculatorParser.java:21)
+	at es.codeurjc.test.CalculatorParserTest.Test_Num_17(CalculatorParserTest.java:210)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 
-
-Process finished with exit code -1
 ```
 
 **EJ17. Código mínimo para que el test pase**
 
-Dado el código que teníamos, solo servía para la resta, debido a que si la
-expresión original contenía un `-`, siempre se restaba todo al primer operando.
-En este ejemplo, es importante que las operaciones se apliquen al primer operando,
-pero sabiendo si se trata de una suma o una resta. Por ende, agregamos un array
-que, en vez de contener solo números, contenga también sus correspondientes signos.
-
-Sea el ejemplo `"5 + 7 - 3"`, se trata de esta manera:
-
-- Primer operando: `5`
-- Segundo operando con su signo (`+` `7`)
-- Tercer operando con su signo (`-` `3`)
-
-Dentro del for, se sabrá si se trata de una suma o una resta mediante el carácter `"-"`.
 
 ```java
     public int parse(String expression) {
-        if (!expression.matches("[0-9\\s\\+\\-]+")) {
+    if (expression.equals("7 + 1 - 5"))
+        return 3;
+    if (expression.contains(" - ") && !expression.contains(" + ")) {
+        String[] parts = expression.split("\\s-\\s");
+        int result = Integer.parseInt(parts[0].trim());
+        for (int i = 1; i < parts.length; i++) {
+            result -= Integer.parseInt(parts[i].trim());
+        }
+        return result;
+    }
+
+    String[] parts = expression.split(" \\+ ");
+    int sum = 0;
+    for (String part : parts) {
+        part = part.trim();
+        if (!part.matches("-?\\d+")) {
             throw new InvalidExpression("Invalid Expression");
         }
-    
-        String[] parts = expression.split("\\s*[\\+\\-]\\s*");
-        String[] operators = expression.split("[0-9\\s]+");
-        int result = Integer.parseInt(parts[0].trim());
-    
-        for (int i = 1; i < parts.length; i++) {
-            String operator = operators[i].trim();
-            if (operator.contains("-")){
-                result -= Integer.parseInt(parts[i].trim());
-            }else{
-                result += Integer.parseInt(parts[i].trim());
-            }
-        }
-    
-        return result;
-    }    
+        sum += Integer.parseInt(part);
+    }
+    return sum;
+}
 ```
 **EJ17. Captura de que TODOS los test PASAN**
 
 ![Pasa](capturas/17.png "Pasa")
 
-
-**EJ17. Refactorización**
-
-En términos generales, una operación de `equals()` **(O(n))** es más eficiente que una operación de `contains()` **(O(n·m))**. Además se entiende mejor el código.
-
-```java
-    public int parse(String expression) {
-        if (!expression.matches("[0-9\\s\\+\\-]+")) {
-            throw new InvalidExpression("Invalid Expression");
-        }
-    
-        String[] parts = expression.split("\\s*[\\+\\-]\\s*");
-        String[] operators = expression.split("[0-9\\s]+");
-        int result = Integer.parseInt(parts[0].trim());
-    
-        for (int i = 1; i < parts.length; i++) {
-            String operator = operators[i].trim();
-            if (operator.equals("-")){
-                result -= Integer.parseInt(parts[i].trim());
-            }else{
-                result += Integer.parseInt(parts[i].trim());
-            }
-        }
-    
-        return result;
-    }
-```
-**EJ17. Captura de que TODOS los tests PASAN tras la refactorización**
-
-![Pasa](capturas/17R.png "Pasa")
 
 ### Ejemplo 18
 
@@ -1013,11 +1056,85 @@ En términos generales, una operación de `equals()` **(O(n))** es más eficient
 
 **EJ18. Mensaje del test añadido que NO PASA**
 ```log
- *  The test case did not report any output.
+es.codeurjc.test.InvalidExpression: Invalid Expression
+
+	at es.codeurjc.test.CalculatorParser.parse(CalculatorParser.java:22)
+	at es.codeurjc.test.CalculatorParserTest.Test_Num_18(CalculatorParserTest.java:222)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 ```
+
+**EJ18. Código mínimo para que el test pase**
+
+
+```java
+    public int parse(String expression) {
+        if (expression.equals("7 + 1 - 5"))
+            return 3;
+        if (expression.equals("9 - 5 + 4"))
+            return 8;
+        if (expression.contains(" - ") && !expression.contains(" + ")) {
+            String[] parts = expression.split("\\s-\\s");
+            int result = Integer.parseInt(parts[0].trim());
+            for (int i = 1; i < parts.length; i++) {
+                result -= Integer.parseInt(parts[i].trim());
+            }
+            return result;
+        }
+    
+        String[] parts = expression.split(" \\+ ");
+        int sum = 0;
+        for (String part : parts) {
+            part = part.trim();
+            if (!part.matches("-?\\d+")) {
+                throw new InvalidExpression("Invalid Expression");
+            }
+            sum += Integer.parseInt(part);
+        }
+        return sum;
+    }
+```
+
 **EJ18. Captura de que TODOS los test PASAN**
 
 ![Pasa](capturas/18.png "Pasa")
+
+**EJ18. Refactorización**
+
+Se ha unificado toda la lógica en un único flujo: se utiliza un split(" ") para tokenizar, un bucle que aplica cada operador (+ o -) al acumulador y la comprobación de dígitos con matches("\d+"), eliminando casos especiales codificados y duplicación de código.
+```java
+public int parse(String expression) {
+    String[] tokens = expression.split(" ");
+
+    if (!tokens[0].matches("\\d+")) {
+        throw new InvalidExpression("Invalid Expression");
+    }
+    int result = Integer.parseInt(tokens[0]);
+
+    // Para cada par (operador, número)
+    for (int i = 1; i < tokens.length; i += 2) {
+        String op = tokens[i];
+        String operand = tokens[i + 1];
+
+        if (!operand.matches("\\d+")) {
+            throw new InvalidExpression("Invalid Expression");
+        }
+        int num = Integer.parseInt(operand);
+
+        if (op.equals("+")) {
+            result += num;
+        } else if (op.equals("-")) {
+            result -= num;
+        } else {
+            throw new InvalidExpression("Invalid Expression");
+        }
+    }
+    return result;
+}
+```
+
+**EJ18. Captura de que TODOS los tests PASAN tras la refactorización**
 
 ### Ejemplo 19
 
@@ -1067,13 +1184,10 @@ En términos generales, una operación de `equals()` **(O(n))** es más eficient
 
 **EJ20. Mensaje del test añadido que NO PASA**
 ```log
-java.lang.NumberFormatException: For input string: ""
+es.codeurjc.test.InvalidExpression: Invalid Expression
 
-	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
-	at java.base/java.lang.Integer.parseInt(Integer.java:672)
-	at java.base/java.lang.Integer.parseInt(Integer.java:778)
-	at es.codeurjc.test.CalculatorParser.parse(CalculatorParser.java:14)
-	at es.codeurjc.test.CalculatorParserTest.Test_Num_20(CalculatorParserTest.java:245)
+	at es.codeurjc.test.CalculatorParser.parse(CalculatorParser.java:8)
+	at es.codeurjc.test.CalculatorParserTest.Test_Num_20(CalculatorParserTest.java:246)
 	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
@@ -1081,43 +1195,39 @@ java.lang.NumberFormatException: For input string: ""
 
 **EJ20. Código mínimo para que el test pase**
 
-Se comprueba si el primer símbolo de la cadena es un `-`. Si es negativo, se invierte el signo del primer número extraído.
-
-Además, como ya hemos tratado la cadena (`expression`) y hemos extraído el primer símbolo,
-trabajamos con la cadena sin dicho símbolo (`processedExpr`), es decir, como en los casos anteriores.
+La diferencia está en cómo se valida el número: cuando se usa matches("\\d+"), se exige que el token contenga únicamente dígitos, sin permitir un signo negativo delante, por lo que -5 no cumple y se rechaza; en cambio, con Integer.parseInt(), se intenta convertir directamente el texto en número, y este método sí reconoce y acepta un signo - al principio, por eso en esa versión -5 es válido y se procesa correctamente.
 
 ```java
-    public int parse(String expression) {
-        if (!expression.matches("[0-9\\s\\+\\-]+")) {
+public int parse(String expression) {
+    String[] tokens = expression.split(" ");
+    int result;
+    try {
+        result = Integer.parseInt(tokens[0].trim());
+    } catch (NumberFormatException e) {
+        throw new InvalidExpression("Invalid Expression");
+    }
+
+    for (int i = 1; i < tokens.length; i += 2) {
+        String op = tokens[i];
+        int num;
+        try {
+            num = Integer.parseInt(tokens[i + 1].trim());
+        } catch (NumberFormatException e) {
             throw new InvalidExpression("Invalid Expression");
         }
-    
-        boolean startsWithNegative = expression.trim().startsWith("-");
-        String processedExpr = expression.trim();
-    
-        if (startsWithNegative) {
-            processedExpr = processedExpr.substring(1).trim();
+
+        if (op.equals("+")) {
+            result += num;
+        } else if (op.equals("-")) {
+            result -= num;
+        } else {
+            throw new InvalidExpression("Invalid Expression");
         }
-    
-        String[] parts = processedExpr.split("\\s*[\\+\\-]\\s*");
-        String[] operators = expression.split("[0-9\\s]+");
-    
-        int result = Integer.parseInt(parts[0].trim());
-    
-        if (startsWithNegative) {
-            result = -result;
-        }
-    
-        for (int i = 1; i < parts.length; i++) {
-            String operator = operators[i].trim();
-            if (operator.equals("-")) {
-                result -= Integer.parseInt(parts[i].trim());
-            } else {
-                result += Integer.parseInt(parts[i].trim());
-            }
-        }
-        return result;
     }
+
+    return result;
+}
+
 ```
 **EJ20. Captura de que TODOS los test PASAN**
 
