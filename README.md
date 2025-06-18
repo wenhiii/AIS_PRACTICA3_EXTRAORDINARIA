@@ -30,7 +30,7 @@ java.lang.UnsupportedOperationException: Not implemented yet at es.codeurjc.test
 ```
 **EJ1. Código mínimo para que el test pase**
 
-Devolvemos 1 que es lo mínimo que podemos implementar para que pase
+Devolvemos 1 que es lo mínimo que podemos implementar para que pase.
 
 ```java
     public int parse(String expression) { 
@@ -158,8 +158,7 @@ Agregamos un switch para que reconozca el caso 1 y el 2.
 
 **EJ3. Refactorización**
 
-Para que nuestro switch no se haga más grande y repetitivo, por cada número que entre devolveremos ese número.
-
+Para evitar que nuestro switch crezca y sea repetitivo, devolveremos directamente el número parseado.
 ```java
     public int parse(String expression) {
         return Integer.parseInt(expression);
@@ -331,9 +330,9 @@ El patrón común entre todos los casos es que las expresiones representan sumas
         return sum;
     }
 ```
-En la cual se procesa la expresion de manera dinamica.
+En la cual se procesa la expresión de manera dinámica.
 
-**EJ6. Captura de que TODOS los test PASAN despues de la refacotorizacion**
+**EJ6. Captura de que TODOS los test PASAN después de la refactorización**
 
 ![Pasa](capturas/TestR6.png "Pasa")
 
@@ -366,7 +365,7 @@ En la cual se procesa la expresion de manera dinamica.
 
 ### Ejemplo 8
 
-**INPUT y OUTPUT**: `"A"` -> `Invalid expression`
+**INPUT y OUTPUT**: `"A"` -> `Invalid Expression`
 
 **EJ8. Código de test**
 ```java
@@ -573,7 +572,7 @@ Caused by: java.lang.NumberFormatException: For input string: "B"
 
 **EJ10. Refactorización debido a patrón encontrado**
 
-Se observa que existe un patrón, en la cual todas son letras. Si la expresion es una letra cualesqueria, se produce la excepcion.
+En la cual se procesa la expresión de manera dinámica.
 ```java
     public int parse(String expression) {
         if (expression.matches("^[a-zA-Z]$")) {
