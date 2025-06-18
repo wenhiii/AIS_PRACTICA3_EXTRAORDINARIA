@@ -30,7 +30,7 @@ java.lang.UnsupportedOperationException: Not implemented yet at es.codeurjc.test
 ```
 **EJ1. Código mínimo para que el test pase**
 
-Se añade un if y si la cadena coincide con el número 1 devolvemos el 1.
+Devolvemos 1 que es lo mínimo que podemos implementar para que pase
 
 ```java
     public int parse(String expression) { 
@@ -40,7 +40,7 @@ Se añade un if y si la cadena coincide con el número 1 devolvemos el 1.
 
 **EJ1. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/1.png "Pasa")
+![Pasa](capturas/Test1.png "Pasa")
 
 ### Ejemplo 2
 
@@ -100,7 +100,7 @@ Agregamos un switch para que reconozca el caso 1 y el 2.
 ```    
 **EJ2. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/2.png "Pasa")
+![Pasa](capturas/Test2.png "Pasa")
 
 ### Ejemplo 3
 
@@ -154,7 +154,7 @@ Agregamos un switch para que reconozca el caso 1 y el 2.
 
 **EJ3. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/3.png "Pasa")
+![Pasa](capturas/Test3.png "Pasa")
 
 **EJ3. Refactorización**
 
@@ -167,6 +167,7 @@ Para que nuestro switch no se haga más grande y repetitivo, por cada número qu
 ```
 
 **EJ3. Captura de que TODOS los tests PASAN tras la refactorización**
+![Pasa](capturas/TestR3.png "Pasa")
 
 ### Ejemplo 4
 
@@ -215,7 +216,7 @@ Intentaremos reconocer si la cadena contiene una suma, si es así la separaremos
 
 **EJ4. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/4.png "Pasa")
+![Pasa](capturas/Test4.png "Pasa")
 
 ### Ejemplo 5
 
@@ -263,7 +264,7 @@ java.lang.NumberFormatException: For input string: "2 + 3"
 
 **EJ5. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/5.png "Pasa")
+![Pasa](capturas/Test5.png "Pasa")
 
 ### Ejemplo 6
 
@@ -314,7 +315,7 @@ java.lang.NumberFormatException: For input string: "2 + 3 + 4"
 
 **EJ6. Captura de que TODOS los test PASAN**
 
-
+![Pasa](capturas/Test6.png "Pasa")
 
 **EJ6. Refactorización debido a patrón encontrado**
 
@@ -334,7 +335,7 @@ En la cual se procesa la expresion de manera dinamica.
 
 **EJ6. Captura de que TODOS los test PASAN despues de la refacotorizacion**
 
-![Pasa](capturas/6.png "Pasa")
+![Pasa](capturas/TestR6.png "Pasa")
 
 ### Ejemplo 7
 
@@ -361,7 +362,7 @@ En la cual se procesa la expresion de manera dinamica.
 ```
 **EJ7. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/7.png "Pasa")
+![Pasa](capturas/Test7.png "Pasa")
 
 ### Ejemplo 8
 
@@ -435,7 +436,7 @@ Se requiere de crear la clase InvalidExpression que será encargada de recoger y
 
 **EJ8. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/8.png "Pasa")
+![Pasa](capturas/Test8.png "Pasa")
 
 
 ### Ejemplo 9
@@ -501,7 +502,7 @@ Caused by: java.lang.NumberFormatException: For input string: "B"
 
 **EJ9. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/9.png "Pasa")
+![Pasa](capturas/Test9.png "Pasa")
 
 ### Ejemplo 10
 
@@ -568,7 +569,7 @@ Caused by: java.lang.NumberFormatException: For input string: "B"
 
 **EJ10. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/10.png "Pasa")
+![Pasa](capturas/Test10.png "Pasa")
 
 **EJ10. Refactorización debido a patrón encontrado**
 
@@ -588,6 +589,8 @@ Se observa que existe un patrón, en la cual todas son letras. Si la expresion e
 ```
 
 **EJ10. Captura de que TODOS los test PASAN refactorizacion**
+
+![Pasa](capturas/TestR10.png "Pasa")
 
 ### Ejemplo 11
 
@@ -651,7 +654,7 @@ Caused by: java.lang.NumberFormatException: For input string: "HoLa"
 ```
 **EJ11. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/11.png "Pasa")
+![Pasa](capturas/Test11.png "Pasa")
 
 ### Ejemplo 12
 
@@ -716,6 +719,8 @@ Caused by: java.lang.NumberFormatException: For input string: "A"
 
 **EJ12. Captura de que TODOS los test PASAN**
 
+![Pasa](capturas/Test12.png "Pasa")
+
 **EJ12. Refactorización debido a patrón encontrado**
 
 En el código original, se detectaba una expresión inválida solo si era una letra única o cadenas específicas como "HoLa" o "1 + A". Esto limita la validación a casos puntuales y no detecta expresiones con letras mezcladas o inválidas.
@@ -740,7 +745,7 @@ public int parse(String expression) {
 **EJ12. Captura de que TODOS los test PASAN refactorizacion**
 
 
-![Pasa](capturas/12.png "Pasa")
+![Pasa](capturas/TestR12.png "Pasa")
 
 ### Ejemplo 13
 
@@ -796,7 +801,7 @@ Process finished with exit code -1
 ```
 **EJ13. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/13.png "Pasa")
+![Pasa](capturas/Test13.png "Pasa")
 
 ### Ejemplo 14
 
@@ -850,7 +855,7 @@ es.codeurjc.test.InvalidExpression: Invalid Expression
 ```
 **EJ14. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/14.png "Pasa")
+![Pasa](capturas/Test14.png "Pasa")
 
 ### Ejemplo 15
 
@@ -910,7 +915,7 @@ public int parse(String expression) {
 
 **EJ15. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/15.png "Pasa")
+![Pasa](capturas/Test15.png "Pasa")
 
 **EJ15. Refactorización debido a patrón encontrado**
 
@@ -942,6 +947,8 @@ public int parse(String expression) {
 
 **EJ15. Captura de que TODOS los test PASAN refactorizacion**
 
+![Pasa](capturas/TestR15.png "Pasa")
+
 
 ### Ejemplo 16
 
@@ -968,7 +975,7 @@ public int parse(String expression) {
 ```
 **EJ16. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/16.png "Pasa")
+![Pasa](capturas/Test16.png "Pasa")
 
 ### Ejemplo 17
 
@@ -1032,7 +1039,7 @@ es.codeurjc.test.InvalidExpression: Invalid Expression
 ```
 **EJ17. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/17.png "Pasa")
+![Pasa](capturas/Test17.png "Pasa")
 
 
 ### Ejemplo 18
@@ -1098,7 +1105,7 @@ es.codeurjc.test.InvalidExpression: Invalid Expression
 
 **EJ18. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/18.png "Pasa")
+![Pasa](capturas/Test18.png "Pasa")
 
 **EJ18. Refactorización**
 
@@ -1136,6 +1143,8 @@ public int parse(String expression) {
 
 **EJ18. Captura de que TODOS los tests PASAN tras la refactorización**
 
+![Pasa](capturas/TestR18.png "Pasa")
+
 ### Ejemplo 19
 
 **INPUT y OUTPUT**: `"9 + 1 - 6 - 2"` -> `2`
@@ -1161,7 +1170,7 @@ public int parse(String expression) {
 ```
 **EJ19. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/19.png "Pasa")
+![Pasa](capturas/Test19.png "Pasa")
 
 ### Ejemplo 20
 
@@ -1231,4 +1240,4 @@ public int parse(String expression) {
 ```
 **EJ20. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/20.png "Pasa")
+![Pasa](capturas/Test20.png "Pasa")
