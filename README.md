@@ -5,6 +5,8 @@
 | Wenhao Zhang                   |     w.zhang.2022@alumnos.urjc.es  |
 | Diego Ismael Cantador Trapero  | di.cantador.2022@alumnos.urjc.es  |
 
+[Repositorio GitHub](https://github.com/wenhiii/AIS_PRACTICA3_EXTRAORDINARIA)
+
 ## Ejemplo 1
 
 **INPUT y OUTPUT**: `"1"` -> `1`
@@ -846,7 +848,7 @@ es.codeurjc.test.InvalidExpression: Invalid Expression
 
 ## Ejemplo 15
 
-**INPUT y OUTPUT**: `"7 - 2 - 1"` -> `2`
+**INPUT y OUTPUT**: `"7 - 2 - 1"` -> `4`
 
 **EJ15. Código de test**
 ```java
