@@ -5,7 +5,7 @@
 | Wenhao Zhang                   |     w.zhang.2022@alumnos.urjc.es  |
 | Diego Ismael Cantador Trapero  | di.cantador.2022@alumnos.urjc.es  |
 
-### Ejemplo 1
+## Ejemplo 1
 
 **INPUT y OUTPUT**: `"1"` -> `1`
 
@@ -30,7 +30,7 @@ java.lang.UnsupportedOperationException: Not implemented yet at es.codeurjc.test
 ```
 **EJ1. Código mínimo para que el test pase**
 
-Devolvemos 1 que es lo mínimo que podemos implementar para que pase.
+Se añade un if y si la cadena coincide con el número 1 devolvemos el 1.
 
 ```java
     public int parse(String expression) { 
@@ -40,9 +40,9 @@ Devolvemos 1 que es lo mínimo que podemos implementar para que pase.
 
 **EJ1. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test1.png "Pasa")
+![Pasa](capturas/1.png "Pasa")
 
-### Ejemplo 2
+## Ejemplo 2
 
 **INPUT y OUTPUT**: `"2"` -> `2`
 
@@ -81,28 +81,22 @@ Actual   :1
 
 **EJ2. Código mínimo para que el test pase**
 
-Agregamos un switch para que reconozca el caso 1 y el 2.
+Agregamos un "if" para que reconozca el caso 1 y el 2.
 
 ```java
-    public int parse(String expression) { 
-        switch(expression){
-            
-            case "1":
-            return 1;
-
-            case "2":
-            return 2;
-
-            default:
-            throw new UnsupportedOperationException("Not implemented yet"); 
-        }  
+    public int parse(String expression) {
+    if (expression.equals("1")){
+        return 1;
+    }else {
+        return 2;
     }
+}
 ```    
 **EJ2. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test2.png "Pasa")
+![Pasa](capturas/2.png "Pasa")
 
-### Ejemplo 3
+## Ejemplo 3
 
 **INPUT y OUTPUT**: `"3"` -> `3`
 
@@ -131,34 +125,28 @@ java.lang.UnsupportedOperationException: Not implemented yet
 
 **EJ3. Código mínimo para que el test pase**
 
-Agregamos un switch para que reconozca el caso 1 y el 2.
+Agregamos un "if" para que reconozca el caso 1 y el 2.
 
 ```java
-    public int parse(String expression) { 
-        switch(expression){
-            
-            case "1":
+    public int parse(String expression) {
+        if (expression.equals("1")){
             return 1;
-
-            case "2":
+        }else if (expression.equals("2")){
             return 2;
-
-            case "3":
+        }else{
             return 3;
-
-            default:
-            throw new UnsupportedOperationException("Not implemented yet"); 
-        }  
+        }
     }
 ```    
 
 **EJ3. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test3.png "Pasa")
+![Pasa](capturas/3.png "Pasa")
 
 **EJ3. Refactorización**
 
-Para evitar que nuestro switch crezca y sea repetitivo, devolveremos directamente el número parseado.
+Para que nuestro "if" no se haga más grande y repetitivo, por cada número que entre devolveremos ese número.
+
 ```java
     public int parse(String expression) {
         return Integer.parseInt(expression);
@@ -166,9 +154,8 @@ Para evitar que nuestro switch crezca y sea repetitivo, devolveremos directament
 ```
 
 **EJ3. Captura de que TODOS los tests PASAN tras la refactorización**
-![Pasa](capturas/TestR3.png "Pasa")
 
-### Ejemplo 4
+## Ejemplo 4
 
 **INPUT y OUTPUT**: `"1 + 1"` -> `2`
 
@@ -190,7 +177,7 @@ Para evitar que nuestro switch crezca y sea repetitivo, devolveremos directament
 **EJ4. Mensaje del test añadido que NO PASA**
 
 ```log
-java.lang.NumberFormatException: For input string: "1 + 2"
+java.lang.NumberFormatException: For input string: "1 + 1"
  at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)
  at java.base/java.lang.Integer.parseInt(Integer.java:662)
  at java.base/java.lang.Integer.parseInt(Integer.java:778)
@@ -215,9 +202,9 @@ Intentaremos reconocer si la cadena contiene una suma, si es así la separaremos
 
 **EJ4. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test4.png "Pasa")
+![Pasa](capturas/4.png "Pasa")
 
-### Ejemplo 5
+## Ejemplo 5
 
 **INPUT y OUTPUT**: `"2 + 3"` -> `5`
 
@@ -263,9 +250,9 @@ java.lang.NumberFormatException: For input string: "2 + 3"
 
 **EJ5. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test5.png "Pasa")
+![Pasa](capturas/5.png "Pasa")
 
-### Ejemplo 6
+## Ejemplo 6
 
 **INPUT y OUTPUT**: `"2 + 3 + 4"` -> `9`
 
@@ -314,12 +301,12 @@ java.lang.NumberFormatException: For input string: "2 + 3 + 4"
 
 **EJ6. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test6.png "Pasa")
+
 
 **EJ6. Refactorización debido a patrón encontrado**
 
 En los ejemplos originales, se observa que el método parse no es escalable, ya que depende de múltiples bloques if-else que están codificados de forma explícita para casos específicos.
-El patrón común entre todos los casos es que las expresiones representan sumas de números separados por el operador +
+El patrón común entre todos los casos es que las expresiones representan sumas de números separados por el operador "+".
 ```java
     public int parse(String expression) {
         String[] parts = expression.split(" \\+ ");
@@ -332,11 +319,11 @@ El patrón común entre todos los casos es que las expresiones representan sumas
 ```
 En la cual se procesa la expresión de manera dinámica.
 
-**EJ6. Captura de que TODOS los test PASAN después de la refactorización**
+**EJ6. Captura de que TODOS los test PASAN despues de la refacotorizacion**
 
-![Pasa](capturas/TestR6.png "Pasa")
+![Pasa](capturas/6.png "Pasa")
 
-### Ejemplo 7
+## Ejemplo 7
 
 **INPUT y OUTPUT**: `"1 + 2 + 3 + 4"` -> `10`
 
@@ -361,11 +348,11 @@ En la cual se procesa la expresión de manera dinámica.
 ```
 **EJ7. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test7.png "Pasa")
+![Pasa](capturas/7.png "Pasa")
 
-### Ejemplo 8
+## Ejemplo 8
 
-**INPUT y OUTPUT**: `"A"` -> `Invalid Expression`
+**INPUT y OUTPUT**: `"A"` -> `Invalid expression`
 
 **EJ8. Código de test**
 ```java
@@ -435,10 +422,10 @@ Se requiere de crear la clase InvalidExpression que será encargada de recoger y
 
 **EJ8. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test8.png "Pasa")
+![Pasa](capturas/8.png "Pasa")
 
 
-### Ejemplo 9
+## Ejemplo 9
 
 **INPUT y OUTPUT**: `"B"` -> `Invalid expression`
 
@@ -501,9 +488,9 @@ Caused by: java.lang.NumberFormatException: For input string: "B"
 
 **EJ9. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test9.png "Pasa")
+![Pasa](capturas/9.png "Pasa")
 
-### Ejemplo 10
+## Ejemplo 10
 
 **INPUT y OUTPUT**: `"k"` -> `Invalid expression`
 
@@ -568,11 +555,11 @@ Caused by: java.lang.NumberFormatException: For input string: "B"
 
 **EJ10. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test10.png "Pasa")
+![Pasa](capturas/10.png "Pasa")
 
 **EJ10. Refactorización debido a patrón encontrado**
 
-En la cual se procesa la expresión de manera dinámica.
+Se observa que existe un patrón, en la cual todas son letras. Si la expresion es una letra cualesqueria, se produce la excepcion.
 ```java
     public int parse(String expression) {
         if (expression.matches("^[a-zA-Z]$")) {
@@ -589,9 +576,7 @@ En la cual se procesa la expresión de manera dinámica.
 
 **EJ10. Captura de que TODOS los test PASAN refactorizacion**
 
-![Pasa](capturas/TestR10.png "Pasa")
-
-### Ejemplo 11
+## Ejemplo 11
 
 **INPUT y OUTPUT**: `"HoLa"` -> `Invalid expression`
 
@@ -653,9 +638,9 @@ Caused by: java.lang.NumberFormatException: For input string: "HoLa"
 ```
 **EJ11. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test11.png "Pasa")
+![Pasa](capturas/11.png "Pasa")
 
-### Ejemplo 12
+## Ejemplo 12
 
 **INPUT y OUTPUT**: `"1 + A"` -> `Invalid expression`
 
@@ -718,8 +703,6 @@ Caused by: java.lang.NumberFormatException: For input string: "A"
 
 **EJ12. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test12.png "Pasa")
-
 **EJ12. Refactorización debido a patrón encontrado**
 
 En el código original, se detectaba una expresión inválida solo si era una letra única o cadenas específicas como "HoLa" o "1 + A". Esto limita la validación a casos puntuales y no detecta expresiones con letras mezcladas o inválidas.
@@ -744,9 +727,9 @@ public int parse(String expression) {
 **EJ12. Captura de que TODOS los test PASAN refactorizacion**
 
 
-![Pasa](capturas/TestR12.png "Pasa")
+![Pasa](capturas/12.png "Pasa")
 
-### Ejemplo 13
+## Ejemplo 13
 
 **INPUT y OUTPUT**: `"5 - 3"` -> `2`
 
@@ -800,9 +783,9 @@ Process finished with exit code -1
 ```
 **EJ13. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test13.png "Pasa")
+![Pasa](capturas/13.png "Pasa")
 
-### Ejemplo 14
+## Ejemplo 14
 
 **INPUT y OUTPUT**: `"1 - 2"` -> `-1`
 
@@ -854,9 +837,9 @@ es.codeurjc.test.InvalidExpression: Invalid Expression
 ```
 **EJ14. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test14.png "Pasa")
+![Pasa](capturas/14.png "Pasa")
 
-### Ejemplo 15
+## Ejemplo 15
 
 **INPUT y OUTPUT**: `"7 - 2 - 1"` -> `2`
 
@@ -914,7 +897,7 @@ public int parse(String expression) {
 
 **EJ15. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test15.png "Pasa")
+![Pasa](capturas/15.png "Pasa")
 
 **EJ15. Refactorización debido a patrón encontrado**
 
@@ -946,10 +929,8 @@ public int parse(String expression) {
 
 **EJ15. Captura de que TODOS los test PASAN refactorizacion**
 
-![Pasa](capturas/TestR15.png "Pasa")
 
-
-### Ejemplo 16
+## Ejemplo 16
 
 **INPUT y OUTPUT**: `"9 - 5 - 3 - 1"` -> `0`
 
@@ -974,9 +955,9 @@ public int parse(String expression) {
 ```
 **EJ16. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test16.png "Pasa")
+![Pasa](capturas/16.png "Pasa")
 
-### Ejemplo 17
+## Ejemplo 17
 
 **INPUT y OUTPUT**: `"7 + 1 - 5"` -> `3`
 
@@ -1038,10 +1019,10 @@ es.codeurjc.test.InvalidExpression: Invalid Expression
 ```
 **EJ17. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test17.png "Pasa")
+![Pasa](capturas/17.png "Pasa")
 
 
-### Ejemplo 18
+## Ejemplo 18
 
 **INPUT y OUTPUT**: `"9 - 5 + 4"` -> `8`
 
@@ -1104,9 +1085,77 @@ es.codeurjc.test.InvalidExpression: Invalid Expression
 
 **EJ18. Captura de que TODOS los test PASAN**
 
-![Pasa](capturas/Test18.png "Pasa")
+![Pasa](capturas/18.png "Pasa")
 
-**EJ18. Refactorización**
+
+## Ejemplo 19
+
+**INPUT y OUTPUT**: `"9 + 1 - 6 - 2"` -> `2`
+
+**EJ19. Código de test**
+```java
+    @Test
+    void Test_Num_19(){
+        // GIVEN
+        String expression = "9 + 1 - 6 - 2";
+    
+        // WHEN
+        int result = calculator.parse(expression);
+    
+        // THEN
+        assertEquals(2, result);
+    }
+```
+
+**EJ19. Mensaje del test añadido que NO PASA**
+```log
+es.codeurjc.test.InvalidExpression: Invalid Expression
+
+	at es.codeurjc.test.CalculatorParser.parse(CalculatorParser.java:22)
+	at es.codeurjc.test.CalculatorParserTest.Test_Num_18(CalculatorParserTest.java:222)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+```
+
+**EJ19. Código mínimo para que el test pase**
+
+```java
+    public int parse(String expression) {
+        if (expression.equals("9 + 1 - 6 - 2")){
+            return 2;
+        }
+        if (expression.equals("7 + 1 - 5"))
+            return 3;
+        if (expression.equals("9 - 5 + 4"))
+            return 8;
+        if (expression.contains(" - ") && !expression.contains(" + ")) {
+            String[] parts = expression.split("\\s-\\s");
+            int result = Integer.parseInt(parts[0].trim());
+            for (int i = 1; i < parts.length; i++) {
+                result -= Integer.parseInt(parts[i].trim());
+            }
+            return result;
+        }
+    
+        String[] parts = expression.split(" \\+ ");
+        int sum = 0;
+        for (String part : parts) {
+            part = part.trim();
+            if (!part.matches("-?\\d+")) {
+                throw new InvalidExpression("Invalid Expression");
+            }
+            sum += Integer.parseInt(part);
+        }
+        return sum;
+    }
+```
+
+**EJ19. Captura de que TODOS los test PASAN**
+
+![Pasa](capturas/19.png "Pasa")
+
+**EJ19. Refactorización**
 
 Se ha unificado toda la lógica en un único flujo: se utiliza un split(" ") para tokenizar, un bucle que aplica cada operador (+ o -) al acumulador y la comprobación de dígitos con matches("\d+"), eliminando casos especiales codificados y duplicación de código.
 ```java
@@ -1140,38 +1189,9 @@ public int parse(String expression) {
 }
 ```
 
-**EJ18. Captura de que TODOS los tests PASAN tras la refactorización**
+**EJ19. Captura de que TODOS los tests PASAN tras la refactorización**
 
-![Pasa](capturas/TestR18.png "Pasa")
-
-### Ejemplo 19
-
-**INPUT y OUTPUT**: `"9 + 1 - 6 - 2"` -> `2`
-
-**EJ19. Código de test**
-```java
-    @Test
-    void Test_Num_19(){
-        // GIVEN
-        String expression = "9 + 1 - 6 - 2";
-    
-        // WHEN
-        int result = calculator.parse(expression);
-    
-        // THEN
-        assertEquals(2, result);
-    }
-```
-
-**EJ19. Mensaje del test añadido que NO PASA**
-```log
- *  The test case did not report any output.
-```
-**EJ19. Captura de que TODOS los test PASAN**
-
-![Pasa](capturas/Test19.png "Pasa")
-
-### Ejemplo 20
+## Ejemplo 20
 
 **INPUT y OUTPUT**: `"-5 + 9"` -> `4`
 
